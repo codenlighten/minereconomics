@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Miner Economics</title>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: sans-serif;
+			}
+			.container {
+				width: 100%;
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 0 20px;
+			}
+			#header {
+				text-align: center;
+				padding: 20px 0;
+			}
+			#metrics {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				padding: 20px 0;
+			}
+			#metrics input,
+			#costpertransaction {
+				width: 100%;
+				max-width: 300px;
+				margin: 10px 0;
+				padding: 10px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+			}
+			#metrics button {
+				width: 100%;
+				max-width: 300px;
+				margin: 10px 0;
+				padding: 10px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				background-color: #ccc;
+				cursor: pointer;
+			}
+			#results {
+				padding: 20px 0;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+			}
+			#results h2 {
+				text-align: center;
+			}
+			#results p {
+				text-align: center;
+			}
+			.hidden {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container" id="header">
+			<h1>Miner Economics</h1>
+		</div>
+		<div class="container" id="metrics">
+			<label for="price">Price of BSV Bitcoin</label>
+			<input
+				type="number"
+				id="price"
+				name="price"
+				value="1000"
+				min="1"
+				step="1"
+			/>
+			<label for="numtransactions">Number of Transaction/Second</label>
+			<input
+				type="number"
+				id="numtransactions"
+				name="numtransactions"
+				value="100"
+			/>
+			<label for="costperbyte">Satoshis Per Byte</label>
+			<input type="number" id="satsperbyte" name="satoshisperbyte" value="10" />
+			<label class="hidden" for="" id="costpertransaction"></label>
+			<label for="avgsize">Average Tx Size</label>
+			<input type="text" id="avgsize" name="avgsize" value="250" />
+			<label for="blocksize">Block Size in GB</label>
+			<input
+				type="number"
+				id="blocksize"
+				name="blocksize"
+				value="1"
+				step=".1"
+			/>
+			<label for="currentsubsidy">Current Subsidy</label>
+			<input
+				type="number"
+				id="currentsubsidy"
+				name="currentsubsidy"
+				value="6.25"
+				min="0"
+				max="6.25"
+			/>
+		</div>
+		<div id="results"></div>
+		<script>
+			const price = document.getElementById("price");
+			const numtransactions = document.getElementById("numtransactions");
+			const blocksize = document.getElementById("blocksize");
+			const currentsubsidy = document.getElementById("currentsubsidy");
+			const avgsize = document.getElementById("avgsize");
+			const satsperbyte = document.getElementById("satsperbyte");
+			const costlabel = document.getElementById("costpertransaction");
+			const results = document.getElementById("results");
+			let currentHtml = ``;
+			const calculator = () => {
+				const priceValue = parseFloat(price.value);
+				const numtransactionsValue = parseFloat(numtransactions.value);
+				let blocksizeValue = parseFloat(blocksize.value);
+				const currentsubsidyValue = parseFloat(currentsubsidy.value);
+				const avgsizeValue = parseFloat(avgsize.value);
+				const satsperbyteValue = parseFloat(satsperbyte.value);
+				console.log(
+					priceValue,
+					numtransactionsValue,
+					blocksizeValue,
+					currentsubsidyValue,
+					avgsizeValue,
+					satsperbyteValue
+				);
+				//blocksize is in GB so convert to MB
+				blocksizeValue = blocksizeValue * 1000;
+				const costperbyte = satsperbyteValue / 100000000;
+				const costPerTransaction = costperbyte * avgsizeValue;
+				const txFees =
+					(numtransactionsValue * avgsizeValue * satsperbyteValue) / 100000000;
+				const totalReward = currentsubsidyValue + txFees;
+				const totalRewardPerDay = totalReward * 144;
+				const totalRewardPerMonth = totalRewardPerDay * 30;
+				const totalRewardPerYear = totalRewardPerMonth * 12;
+
+				costlabel.innerHTML = `Cost Per Transaction: ${costPerTransaction}`;
+				costlabel.classList.remove("hidden");
+				const html = ` <h2>Results</h2>
+							<p>Total Reward Per Block: ${totalReward}</p>
+							<p>Total Reward Per Day: ${totalRewardPerDay}</p>
+							<p>Total Reward Per Month: ${totalRewardPerMonth}</p>
+							<p>Total Reward Per Year: ${totalRewardPerYear}</p>
+						`;
+				if (currentHtml !== html) {
+					results.innerHTML = html;
+					currentHtml = html;
+				}
+			};
+			price.addEventListener("change", () => {
+				console.log(price.value);
+				calculator();
+			});
+			numtransactions.addEventListener("change", () => {
+				console.log(numtransactions.value);
+				calculator();
+			});
+			blocksize.addEventListener("change", () => {
+				console.log(blocksize.value);
+				calculator();
+			});
+			currentsubsidy.addEventListener("change", () => {
+				console.log(currentsubsidy.value);
+				calculator();
+			});
+			avgsize.addEventListener("change", () => {
+				console.log(avgsize.value);
+				calculator();
+			});
+			satsperbyte.addEventListener("change", () => {
+				console.log(satsperbyte.value);
+				calculator();
+			});
+			calculate.addEventListener("click", () => {
+				calculator();
+			});
+		</script>
+	</body>
+</html>
