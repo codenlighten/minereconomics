@@ -94,8 +94,13 @@
 				name="numtransactions"
 				value="100"
 			/>
-			<label for="costperbyte">Satoshis Per Byte</label>
-			<input type="number" id="satsperbyte" name="satoshisperbyte" value="10" />
+			<label for="costperbyte">Satoshis Per Kilobyte</label>
+			<input
+				type="number"
+				id="satsperkbyte"
+				name="satoshisperbyte"
+				value="10"
+			/>
 			<label class="hidden" for="" id="costpertransaction"></label>
 			<label for="avgsize">Average Tx Size</label>
 			<input type="text" id="avgsize" name="avgsize" value="250" />
@@ -117,6 +122,9 @@
 				max="6.25"
 			/>
 		</div>
+		<div class="container" id="metrics">
+			<button>Calculate</button>
+		</div>
 		<div id="results">
 			<h2>Results</h2>
 			<p class="economics" id="perBlock">Total Reward Per Block: 6.25</p>
@@ -130,7 +138,7 @@
 			const blocksize = document.getElementById("blocksize");
 			const currentsubsidy = document.getElementById("currentsubsidy");
 			const avgsize = document.getElementById("avgsize");
-			const satsperbyte = document.getElementById("satsperbyte");
+			let satsperkbyte = document.getElementById("satsperkbyte");
 			const costlabel = document.getElementById("costpertransaction");
 			const results = document.getElementById("results");
 			const calculate = document.querySelector("button");
@@ -138,7 +146,9 @@
 			const perDay = document.getElementById("perDay");
 			const perMonth = document.getElementById("perMonth");
 			const perYear = document.getElementById("perYear");
+
 			const calculator = () => {
+				//convert
 				const priceValue = parseInt(price.value);
 				const numtransactionsValue = parseFloat(numtransactions.value);
 				const transactionsPerBlock = numtransactionsValue * 60 * 60 * 10;
@@ -148,7 +158,8 @@
 				const currentsubsidyValue = parseFloat(currentsubsidy.value);
 				const avgsizeValue = parseFloat(avgsize.value);
 				const pricePerTransaction = pricePerSatoshi * avgsizeValue;
-				const costPerTransaction = pricePerTransaction * satsperbyte.value;
+				const costPerTransaction =
+					(pricePerTransaction * satsperbyte.value) / 1000;
 				const totalReward =
 					currentsubsidyValue + transactionsPerBlock * pricePerTransaction;
 				const totalRewardPerDay = totalReward * 144;
