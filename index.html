@@ -104,14 +104,8 @@
 			<label class="hidden" for="" id="costpertransaction"></label>
 			<label for="avgsize">Average Tx Size</label>
 			<input type="text" id="avgsize" name="avgsize" value="250" />
-			<label for="blocksize">Block Size in GB</label>
-			<input
-				type="number"
-				id="blocksize"
-				name="blocksize"
-				value="1"
-				step=".1"
-			/>
+			<label for="blocksize">Block Size Required in GB</label>
+			<input type="number" id="blocksize" name="blocksize" value="1" />
 			<label for="currentsubsidy">Current Subsidy</label>
 			<input
 				type="number"
@@ -121,6 +115,8 @@
 				min="0"
 				max="6.25"
 			/>
+			<label for="">Blocks Found Per Day</label>
+			<input type="number" id="blocksperday" name="blocksperday" value="144" />
 		</div>
 		<div class="container" id="metrics">
 			<button>Calculate</button>
@@ -146,7 +142,7 @@
 			const perDay = document.getElementById("perDay");
 			const perMonth = document.getElementById("perMonth");
 			const perYear = document.getElementById("perYear");
-
+			const blocksperday = document.getElementById("blocksperday");
 			const calculator = () => {
 				//convert
 				const priceValue = parseInt(price.value);
@@ -154,18 +150,18 @@
 				const transactionsPerBlock = numtransactionsValue * 60 * 60 * 10;
 				const transactionsPerDay = transactionsPerBlock * 144;
 				const pricePerSatoshi = priceValue / 100000000;
-				let blocksizeValue = parseFloat(blocksize.value);
 				const currentsubsidyValue = parseFloat(currentsubsidy.value);
 				const avgsizeValue = parseFloat(avgsize.value);
 				const pricePerTransaction = pricePerSatoshi * avgsizeValue;
 				const costPerTransaction =
-					(pricePerTransaction * satsperkbyte.value) / 1000;
+					(pricePerTransaction * satsperkbyte.value) / 100000000;
 				const totalReward =
 					currentsubsidyValue + transactionsPerBlock * pricePerTransaction;
-				const totalRewardPerDay = totalReward * 144;
+				const totalRewardPerDay = (totalReward * 144) / blocksperday.value;
 				const totalRewardPerMonth = totalRewardPerDay * 30;
 				const totalRewardPerYear = totalRewardPerMonth * 12;
-
+				const totalbytes = avgsizeValue * transactionsPerBlock;
+				blocksize.value = totalbytes / 1000000000; //convert to GB
 				costlabel.innerHTML = `Cost Per Transaction: ${costPerTransaction}`;
 				costlabel.classList.remove("hidden");
 				perBlock.innerHTML = `Total Reward Per Block: ${totalReward}`;
@@ -193,8 +189,12 @@
 				console.log(avgsize.value);
 				calculator();
 			});
-			satsperbyte.addEventListener("change", () => {
+			satsperkbyte.addEventListener("change", () => {
 				console.log(satsperbyte.value);
+				calculator();
+			});
+			blocksperday.addEventListener("change", () => {
+				console.log(blocksperday.value);
 				calculator();
 			});
 			calculate.addEventListener("click", () => {
