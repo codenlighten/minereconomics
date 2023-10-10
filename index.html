@@ -159,7 +159,7 @@
 				const avgsizeValue = parseFloat(avgsize.value);
 				const pricePerTransaction = pricePerSatoshi * avgsizeValue;
 				const costPerTransaction =
-					(pricePerTransaction * satsperbyte.value) / 1000;
+					(pricePerTransaction * satsperkbyte.value) / 1000;
 				const totalReward =
 					currentsubsidyValue + transactionsPerBlock * pricePerTransaction;
 				const totalRewardPerDay = totalReward * 144;
