@@ -60,6 +60,13 @@
 			#results p {
 				text-align: center;
 			}
+			#results p:first-child {
+				font-weight: bold;
+			}
+			.economics {
+				font-size: 1.5rem;
+			}
+
 			.hidden {
 				display: none;
 			}
@@ -77,6 +84,7 @@
 				name="price"
 				value="1000"
 				min="1"
+				max="1000000"
 				step="1"
 			/>
 			<label for="numtransactions">Number of Transaction/Second</label>
@@ -109,7 +117,13 @@
 				max="6.25"
 			/>
 		</div>
-		<div id="results"></div>
+		<div id="results">
+			<h2>Results</h2>
+			<p class="economics" id="perBlock">Total Reward Per Block: 6.25</p>
+			<p class="economics" id="perDay">Total Reward Per Day: 900</p>
+			<p class="economics" id="perMonth">Total Reward Per Month: 27000</p>
+			<p class="economics" id="perYear">Total Reward Per Year: 324000</p>
+		</div>
 		<script>
 			const price = document.getElementById("price");
 			const numtransactions = document.getElementById("numtransactions");
@@ -119,45 +133,34 @@
 			const satsperbyte = document.getElementById("satsperbyte");
 			const costlabel = document.getElementById("costpertransaction");
 			const results = document.getElementById("results");
-			let currentHtml = ``;
+			const calculate = document.querySelector("button");
+			const perBlock = document.getElementById("perBlock");
+			const perDay = document.getElementById("perDay");
+			const perMonth = document.getElementById("perMonth");
+			const perYear = document.getElementById("perYear");
 			const calculator = () => {
-				const priceValue = parseFloat(price.value);
+				const priceValue = parseInt(price.value);
 				const numtransactionsValue = parseFloat(numtransactions.value);
+				const transactionsPerBlock = numtransactionsValue * 60 * 60 * 10;
+				const transactionsPerDay = transactionsPerBlock * 144;
+				const pricePerSatoshi = priceValue / 100000000;
 				let blocksizeValue = parseFloat(blocksize.value);
 				const currentsubsidyValue = parseFloat(currentsubsidy.value);
 				const avgsizeValue = parseFloat(avgsize.value);
-				const satsperbyteValue = parseFloat(satsperbyte.value);
-				console.log(
-					priceValue,
-					numtransactionsValue,
-					blocksizeValue,
-					currentsubsidyValue,
-					avgsizeValue,
-					satsperbyteValue
-				);
-				//blocksize is in GB so convert to MB
-				blocksizeValue = blocksizeValue * 1000;
-				const costperbyte = satsperbyteValue / 100000000;
-				const costPerTransaction = costperbyte * avgsizeValue;
-				const txFees =
-					(numtransactionsValue * avgsizeValue * satsperbyteValue) / 100000000;
-				const totalReward = currentsubsidyValue + txFees;
+				const pricePerTransaction = pricePerSatoshi * avgsizeValue;
+				const costPerTransaction = pricePerTransaction * satsperbyte.value;
+				const totalReward =
+					currentsubsidyValue + transactionsPerBlock * pricePerTransaction;
 				const totalRewardPerDay = totalReward * 144;
 				const totalRewardPerMonth = totalRewardPerDay * 30;
 				const totalRewardPerYear = totalRewardPerMonth * 12;
 
 				costlabel.innerHTML = `Cost Per Transaction: ${costPerTransaction}`;
 				costlabel.classList.remove("hidden");
-				const html = ` <h2>Results</h2>
-							<p>Total Reward Per Block: ${totalReward}</p>
-							<p>Total Reward Per Day: ${totalRewardPerDay}</p>
-							<p>Total Reward Per Month: ${totalRewardPerMonth}</p>
-							<p>Total Reward Per Year: ${totalRewardPerYear}</p>
-						`;
-				if (currentHtml !== html) {
-					results.innerHTML = html;
-					currentHtml = html;
-				}
+				perBlock.innerHTML = `Total Reward Per Block: ${totalReward}`;
+				perDay.innerHTML = `Total Reward Per Day: ${totalRewardPerDay}`;
+				perMonth.innerHTML = `Total Reward Per Month: ${totalRewardPerMonth}`;
+				perYear.innerHTML = `Total Reward Per Year: ${totalRewardPerYear}`;
 			};
 			price.addEventListener("change", () => {
 				console.log(price.value);
