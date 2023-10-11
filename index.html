@@ -157,7 +157,7 @@
 				const satsPerTransaction = avgsizeValue * satsperkbyteValue;
 				const costPerTransaction = (
 					satsPerTransaction * pricePerSatoshi
-				).toFixed(12);
+				).toFixed(8);
 				const totalReward =
 					currentsubsidyValue + transactionsPerBlock * costPerTransaction;
 				const totalRewardPerDay = (totalReward * 144) / blocksperday.value;
