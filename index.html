@@ -12,6 +12,9 @@
 				margin: 0;
 				padding: 0;
 				font-family: sans-serif;
+				/* start with dark mode */
+				background-color: #333;
+				color: #fff;
 			}
 			.container {
 				width: 100%;
@@ -29,6 +32,8 @@
 				justify-content: center;
 				align-items: center;
 				padding: 20px 0;
+				border: 1px solid #ccc;
+				border-radius: 5px;
 			}
 			#metrics input,
 			#costpertransaction {
@@ -70,11 +75,18 @@
 			.hidden {
 				display: none;
 			}
+			.darkMode {
+				background-color: #333;
+				color: #fff;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="container" id="header">
 			<h1>Miner Economics</h1>
+		</div>
+		<div id="containerDarkmode">
+			<button id="darkmode">Dark Mode</button>
 		</div>
 		<div class="container" id="metrics">
 			<label for="price">Price of BSV Bitcoin</label>
@@ -202,6 +214,16 @@
 			});
 			calculate.addEventListener("click", () => {
 				calculator();
+			});
+			const darkmode = document.getElementById("darkmode");
+			const containerDarkmode = document.getElementById("containerDarkmode");
+			darkmode.addEventListener("click", () => {
+				document.body.classList.toggle("darkMode");
+				if (document.body.classList.contains("darkMode")) {
+					darkmode.innerHTML = "Light Mode";
+				} else {
+					darkmode.innerHTML = "Dark Mode";
+				}
 			});
 		</script>
 	</body>
