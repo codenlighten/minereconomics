@@ -12,7 +12,6 @@
 				margin: 0;
 				padding: 0;
 				font-family: sans-serif;
-				/* start with dark mode */
 				background-color: #333;
 				color: #fff;
 			}
@@ -28,36 +27,41 @@
 			}
 			#metrics {
 				display: flex;
-				flex-direction: column;
-				justify-content: center;
+				flex-wrap: wrap;
+				justify-content: space-between;
 				align-items: center;
 				padding: 20px 0;
-				border: 1px solid #ccc;
-				border-radius: 5px;
 			}
-			#metrics input,
-			#costpertransaction {
+			#metrics input {
 				width: 100%;
-				max-width: 300px;
-				margin: 10px 0;
+				max-width: 200px;
 				padding: 10px;
-				border: 1px solid #ccc;
+				border: 1px solid #333;
 				border-radius: 5px;
+				background-color: #fff;
+				color: #333;
+			}
+			#metrics label {
+				width: 100%;
+				max-width: 200px;
+				padding: 10px;
+				border: 1px solid #333;
+				border-radius: 5px;
+				background-color: #fff;
+				color: #333;
 			}
 			#metrics button {
 				width: 100%;
-				max-width: 300px;
-				margin: 10px 0;
+				max-width: 200px;
 				padding: 10px;
-				border: 1px solid #ccc;
+				border: 1px solid #333;
 				border-radius: 5px;
-				background-color: #ccc;
+				background-color: #fff;
+				color: #333;
 				cursor: pointer;
 			}
 			#results {
 				padding: 20px 0;
-				border: 1px solid #ccc;
-				border-radius: 5px;
 			}
 			#results h2 {
 				text-align: center;
@@ -65,23 +69,66 @@
 			#results p {
 				text-align: center;
 			}
-			#results p:first-child {
-				font-weight: bold;
-			}
-			.economics {
+			#results p.economics {
 				font-size: 1.5rem;
-			}
-
-			.hidden {
-				display: none;
-			}
-			.darkMode {
-				background-color: #333;
-				color: #fff;
 			}
 			#containerDarkmode {
 				text-align: center;
 				padding: 20px 0;
+			}
+			#darkmode {
+				width: 100%;
+				max-width: 200px;
+				padding: 10px;
+				border: 1px solid #333;
+				border-radius: 5px;
+				background-color: #fff;
+				color: #333;
+				cursor: pointer;
+			}
+			.darkMode {
+				background-color: #fff;
+				color: #333;
+			}
+			.darkMode #header {
+				background-color: #333;
+				color: #fff;
+			}
+			.darkMode #metrics input {
+				background-color: #333;
+				color: #fff;
+			}
+			.darkMode #metrics label {
+				background-color: #333;
+				color: #fff;
+			}
+			.darkMode #metrics button {
+				background-color: #333;
+				color: #fff;
+			}
+			.darkMode #results {
+				background-color: #333;
+				color: #fff;
+			}
+			.darkMode #results h2 {
+				color: #fff;
+			}
+			.darkMode #results p {
+				color: #fff;
+			}
+			.darkMode #results p.economics {
+				color: #fff;
+			}
+			.darkMode #containerDarkmode {
+				background-color: #333;
+				color: #fff;
+			}
+			.darkMode #darkmode {
+				background-color: #333;
+				color: #fff;
+			}
+			.hidden {
+				display: none;
 			}
 		</style>
 	</head>
